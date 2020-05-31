@@ -3,7 +3,7 @@
 # To be run preferably in batch, without graphics:
 # % exampleB4[a,b,c,d] run2.mac
 #
-#/run/numberOfThreads 4
+#/run/numberOfThreads 8
 /run/initialize
 #
 # Default kinemtics: 
@@ -11,5 +11,5 @@
 # 1000 events
 #
 /run/printProgress 100
-/run/beamOn 1000
+/run/beamOn 1000000
 

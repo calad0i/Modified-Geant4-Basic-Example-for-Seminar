@@ -4,16 +4,18 @@
 # or interactively: Idle> /control/execute run1.mac
 #
 # Change the default number of workers (in multi-threading mode) 
-#/run/numberOfThreads 4
+/run/numberOfThreads 8
 #
 # Initialize kernel
 /run/initialize
 #
 # Default kinematics: 
-# electron 50 MeV in direction (0.,0.,1.)
+# electron 52.8 MeV in direction (0.,0.,1.)
 # 1 event with tracking/verbose
 #
 /tracking/verbose 1
+/gun/particle photon
+/gun/energy 52.8 MeV
 /run/beamOn 1
 #
 #

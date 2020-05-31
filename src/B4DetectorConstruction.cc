@@ -89,13 +89,19 @@ void B4DetectorConstruction::DefineMaterials()
   // Lead material defined using NIST Manager
   auto nistManager = G4NistManager::Instance();
   nistManager->FindOrBuildMaterial("G4_Pb");
-  
+  nistManager->FindOrBuildMaterial("G4_H");
+  nistManager->FindOrBuildMaterial("G4_C");
+
   // Liquid argon material
   G4double a;  // mass of a mole;
   G4double z;  // z=mean number of protons;  
   G4double density; 
-  new G4Material("liquidArgon", z=18., a= 39.95*g/mole, density= 1.390*g/cm3);
-         // The argon by NIST Manager is a gas with a different density
+  G4int nComponents;
+
+  G4Material* bc408 = new G4Material("BC-408",density=(4.74+5.23*6)/60.22*g/cm3,nComponents=2,kStateSolid);
+  bc408->AddMaterial(G4Material::GetMaterial("G4_H"),1/2.104);
+  bc408->AddMaterial(G4Material::GetMaterial("G4_C"),1-1/2.104);
+  // Construct BC-408
 
   // Vacuum
   new G4Material("Galactic", z=1., a=1.01*g/mole,density= universe_mean_density,
@@ -110,10 +116,11 @@ void B4DetectorConstruction::DefineMaterials()
 G4VPhysicalVolume* B4DetectorConstruction::DefineVolumes()
 {
   // Geometry parameters
-  G4int nofLayers = 10;
-  G4double absoThickness = 10.*mm;
-  G4double gapThickness =  5.*mm;
+  G4int nofLayers = 7;
+  G4double absoThickness = 1.5*mm;
+  G4double gapThickness =  50.*mm;
   G4double calorSizeXY  = 10.*cm;
+  G4double VETOThickness = 10.*mm;
 
   auto layerThickness = absoThickness + gapThickness;
   auto calorThickness = nofLayers * layerThickness;
@@ -123,7 +130,7 @@ G4VPhysicalVolume* B4DetectorConstruction::DefineVolumes()
   // Get materials
   auto defaultMaterial = G4Material::GetMaterial("Galactic");
   auto absorberMaterial = G4Material::GetMaterial("G4_Pb");
-  auto gapMaterial = G4Material::GetMaterial("liquidArgon");
+  auto gapMaterial = G4Material::GetMaterial("BC-408");
   
   if ( ! defaultMaterial || ! absorberMaterial || ! gapMaterial ) {
     G4ExceptionDescription msg;
@@ -247,7 +254,27 @@ G4VPhysicalVolume* B4DetectorConstruction::DefineVolumes()
                  false,            // no boolean operation
                  0,                // copy number
                  fCheckOverlaps);  // checking overlaps 
-  
+  //
+  // VETO Sensor
+  //
+  auto VETO
+    = new G4Box("VETO",             // its name
+                 calorSizeXY/2, calorSizeXY/2, VETOThickness/2); // its size
+  auto VETOLV
+    = new G4LogicalVolume(
+                 VETO,             // its solid
+                 gapMaterial,      // its material
+                 "VETO");           // its name
+  fVETOPV
+    = new G4PVPlacement(
+                 0,                // no rotation
+                 G4ThreeVector(0., 0., -(calorThickness/2+VETOThickness/2)), // its position
+                 VETOLV,            // its logical volume                         
+                 "VETO",            // its name
+                 worldLV,          // its mother  volume
+                 false,            // no boolean operation
+                 0,                // copy number
+                 fCheckOverlaps);  // checking overlaps 
   //
   // print parameters
   //

@@ -78,6 +78,7 @@ class B4DetectorConstruction : public G4VUserDetectorConstruction
      
     G4VPhysicalVolume*   fAbsorberPV; // the absorber physical volume
     G4VPhysicalVolume*   fGapPV;      // the gap physical volume
+    G4VPhysicalVolume*   fVETOPV; 
     
     G4bool  fCheckOverlaps; // option to activate checking of volumes overlaps
 };
