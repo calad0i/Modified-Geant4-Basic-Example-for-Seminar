@@ -99,7 +99,7 @@ void B4DetectorConstruction::DefineMaterials()
   G4double density; 
   G4int nComponents;
 
-  G4Material* bc408 = new G4Material("BC-408",density=(4.74*6+5.23)/60.22*g/cm3,nComponents=2,kStateSolid);
+  G4Material* bc408 = new G4Material("BC-408",density=(4.74*12+5.23)/60.22*g/cm3,nComponents=2,kStateSolid);
   bc408->AddMaterial(G4Material::GetMaterial("G4_H"),1-1/2.104);
   bc408->AddMaterial(G4Material::GetMaterial("G4_C"),1/2.104);
   // Construct BC-408
