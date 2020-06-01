@@ -22,21 +22,21 @@
 
   // Draw Eabs histogram in the pad 1
   c1->cd(1);
-  ntuple->Draw("Eabs");
+  B4->Draw("Eabs >> test1(8192,0.1,25)");
   
   // Draw Labs histogram in the pad 2
   c1->cd(2);
-  ntuple->Draw("Labs");
+  B4->Draw("Labs >> test2(8192,0.1,25)");
   
   // Draw Egap histogram in the pad 3
   // with logaritmic scale for y  ?? how to do this?
   c1->cd(3);
-  gPad->SetLogy(1);
-  ntuple->Draw("Egap");
+  //gPad->SetLogy(1);
+  B4->Draw("Egap >> test3(8192,0.1,50)");
   
   // Draw Lgap histogram in the pad 4
   // with logaritmic scale for y  ?? how to do this?
   c1->cd(4);
-  gPad->SetLogy(1);
-  ntuple->Draw("Egap");
+  //gPad->SetLogy(1);
+  B4->Draw("Lgap >> test4(8192,0.1,350)");
 }  

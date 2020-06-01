@@ -91,6 +91,7 @@ void B4DetectorConstruction::DefineMaterials()
   nistManager->FindOrBuildMaterial("G4_Pb");
   nistManager->FindOrBuildMaterial("G4_H");
   nistManager->FindOrBuildMaterial("G4_C");
+  nistManager->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
 
   // Liquid argon material
   G4double a;  // mass of a mole;
@@ -98,9 +99,9 @@ void B4DetectorConstruction::DefineMaterials()
   G4double density; 
   G4int nComponents;
 
-  G4Material* bc408 = new G4Material("BC-408",density=(4.74+5.23*6)/60.22*g/cm3,nComponents=2,kStateSolid);
-  bc408->AddMaterial(G4Material::GetMaterial("G4_H"),1/2.104);
-  bc408->AddMaterial(G4Material::GetMaterial("G4_C"),1-1/2.104);
+  G4Material* bc408 = new G4Material("BC-408",density=(4.74*6+5.23)/60.22*g/cm3,nComponents=2,kStateSolid);
+  bc408->AddMaterial(G4Material::GetMaterial("G4_H"),1-1/2.104);
+  bc408->AddMaterial(G4Material::GetMaterial("G4_C"),1/2.104);
   // Construct BC-408
 
   // Vacuum

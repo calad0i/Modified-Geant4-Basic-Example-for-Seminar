@@ -8,8 +8,9 @@
 #
 # Default kinemtics: 
 # electron 50 MeV in direction (0.,0.,1.)
-# 1000 events
+# 10000000 events
 #
-/run/printProgress 100
-/run/beamOn 1000000
+/gun/particle gamma
+/gun/energy 52.8 MeV
+/run/beamOn 10000000
 
