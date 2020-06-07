@@ -8,9 +8,9 @@
 #
 # Default kinemtics: 
 # electron 50 MeV in direction (0.,0.,1.)
-# 10000000 events
+# 1000000 events
 #
 /gun/particle gamma
 /gun/energy 52.8 MeV
-/run/beamOn 10000000
+/run/beamOn 1000000
 

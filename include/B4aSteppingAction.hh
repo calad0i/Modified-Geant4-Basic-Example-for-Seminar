@@ -48,7 +48,7 @@ public:
                     B4aEventAction* eventAction);
   virtual ~B4aSteppingAction();
 
-  virtual void UserSteppingAction(const G4Step* step);
+  virtual void UserSteppingAction(const G4Step* step) override;
     
 private:
   const B4DetectorConstruction* fDetConstruction;

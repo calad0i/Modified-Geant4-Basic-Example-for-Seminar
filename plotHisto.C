@@ -14,30 +14,43 @@
   TFile f("B4.root");
 
   // Create a canvas and divide it into 2x2 pads
-  TCanvas* c1 = new TCanvas("c1", "", 20, 20, 1000, 1000);
-  c1->Divide(2,2);
+  TCanvas* c1 = new TCanvas("c1", "", 30, 20, 1500, 1000);
+  c1->Divide(3,2);
   
   // Draw Eabs histogram in the pad 1
   c1->cd(1);
+  gPad->SetLogy(1);
   TH1D* hist1 = (TH1D*)f.Get("Eabs");
   hist1->Draw("HIST");
   
   // Draw Labs histogram in the pad 2
-  c1->cd(2);
+  c1->cd(4);
+  gPad->SetLogy(1);
   TH1D* hist2 = (TH1D*)f.Get("Labs");
   hist2->Draw("HIST");
   
   // Draw Egap histogram in the pad 3
   // with logaritmic scale for y
-  TH1D* hist3 = (TH1D*)f.Get("Egap");
-  c1->cd(3);
+  c1->cd(2);
   gPad->SetLogy(1);
+  TH1D* hist3 = (TH1D*)f.Get("Egap");
   hist3->Draw("HIST");
   
   // Draw Lgap histogram in the pad 4
   // with logaritmic scale for y
-  c1->cd(4);
+  c1->cd(5);
   gPad->SetLogy(1);
   TH1D* hist4 = (TH1D*)f.Get("Lgap");
   hist4->Draw("HIST");
+
+
+  TH1D* hist5 = (TH1D*)f.Get("EVETO");
+  c1->cd(3);
+  gPad->SetLogy(1);
+  hist5->Draw("HIST");
+  
+  c1->cd(6);
+  gPad->SetLogy(1);
+  TH1D* hist6 = (TH1D*)f.Get("LVETO");
+  hist6->Draw("HIST");
 }  

@@ -1,4 +1,5 @@
 build/*
 *.json
 *.macro
-B4.root
+*.root
+*.csv

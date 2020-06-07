@@ -99,7 +99,7 @@ void B4DetectorConstruction::DefineMaterials()
   G4double density; 
   G4int nComponents;
 
-  G4Material* bc408 = new G4Material("BC-408",density=(4.74*12+5.23)/60.22*g/cm3,nComponents=2,kStateSolid);
+  G4Material* bc408 = new G4Material("BC-408", density=(4.74*12+5.23)/60.22*g/cm3, nComponents=2, kStateSolid);
   bc408->AddMaterial(G4Material::GetMaterial("G4_H"),1-1/2.104);
   bc408->AddMaterial(G4Material::GetMaterial("G4_C"),1/2.104);
   // Construct BC-408
@@ -155,11 +155,11 @@ G4VPhysicalVolume* B4DetectorConstruction::DefineVolumes()
                                    
   auto worldPV
     = new G4PVPlacement(
-                 0,                // no rotation
+                 nullptr,                // no rotation
                  G4ThreeVector(),  // at (0,0,0)
                  worldLV,          // its logical volume                         
                  "World",          // its name
-                 0,                // its mother  volume
+                 nullptr,                // its mother  volume
                  false,            // no boolean operation
                  0,                // copy number
                  fCheckOverlaps);  // checking overlaps 
@@ -178,7 +178,7 @@ G4VPhysicalVolume* B4DetectorConstruction::DefineVolumes()
                  "Calorimeter");   // its name
                                    
   new G4PVPlacement(
-                 0,                // no rotation
+                 nullptr,                // no rotation
                  G4ThreeVector(),  // at (0,0,0)
                  calorLV,          // its logical volume                         
                  "Calorimeter",    // its name
@@ -206,7 +206,7 @@ G4VPhysicalVolume* B4DetectorConstruction::DefineVolumes()
                  calorLV,          // its mother
                  kZAxis,           // axis of replication
                  nofLayers,        // number of replica
-                 layerThickness);  // witdth of replica
+                 layerThickness);  // width of replica
   
   //                               
   // Absorber
@@ -223,7 +223,7 @@ G4VPhysicalVolume* B4DetectorConstruction::DefineVolumes()
                                    
   fAbsorberPV
     = new G4PVPlacement(
-                 0,                // no rotation
+                 nullptr,                // no rotation
                  G4ThreeVector(0., 0., -gapThickness/2), // its position
                  absorberLV,       // its logical volume                         
                  "Abso",           // its name
@@ -247,7 +247,7 @@ G4VPhysicalVolume* B4DetectorConstruction::DefineVolumes()
                                    
   fGapPV
     = new G4PVPlacement(
-                 0,                // no rotation
+                 nullptr,                // no rotation
                  G4ThreeVector(0., 0., absoThickness/2), // its position
                  gapLV,            // its logical volume                         
                  "Gap",            // its name
@@ -268,7 +268,7 @@ G4VPhysicalVolume* B4DetectorConstruction::DefineVolumes()
                  "VETO");           // its name
   fVETOPV
     = new G4PVPlacement(
-                 0,                // no rotation
+                 nullptr,                // no rotation
                  G4ThreeVector(0., 0., -(calorThickness/2+VETOThickness/2)), // its position
                  VETOLV,            // its logical volume                         
                  "VETO",            // its name

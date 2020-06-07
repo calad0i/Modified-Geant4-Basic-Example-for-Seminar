@@ -60,10 +60,12 @@ B4RunAction::B4RunAction()
   //
   
   // Creating histograms
-  analysisManager->CreateH1("Eabs","Edep in absorber", 100, 0., 800*MeV);
-  analysisManager->CreateH1("Egap","Edep in gap", 100, 0., 100*MeV);
-  analysisManager->CreateH1("Labs","trackL in absorber", 100, 0., 1*m);
-  analysisManager->CreateH1("Lgap","trackL in gap", 100, 0., 50*cm);
+  analysisManager->CreateH1("Eabs","Edep in absorber", 1024, 0, 55*MeV);
+  analysisManager->CreateH1("Egap","Edep in gap", 1024, 0, 55*MeV);
+  analysisManager->CreateH1("Labs","trackL in absorber", 1024, 0, 26*mm);
+  analysisManager->CreateH1("Lgap","trackL in gap", 1024, 0, 210*mm);
+  analysisManager->CreateH1("EVETO","Edep in VETO", 1024, 0, 55*MeV);
+  analysisManager->CreateH1("LVETO","trackL in VETO", 1024, 0, 60*mm);
 
   // Creating ntuple
   //
@@ -72,6 +74,8 @@ B4RunAction::B4RunAction()
   analysisManager->CreateNtupleDColumn("Egap");
   analysisManager->CreateNtupleDColumn("Labs");
   analysisManager->CreateNtupleDColumn("Lgap");
+  analysisManager->CreateNtupleDColumn("EVETO");
+  analysisManager->CreateNtupleDColumn("LVETO");
   analysisManager->FinishNtuple();
 }
 
@@ -133,6 +137,16 @@ void B4RunAction::EndOfRunAction(const G4Run* /*run*/)
       << G4BestUnit(analysisManager->GetH1(3)->mean(), "Length") 
       << " rms = " 
       << G4BestUnit(analysisManager->GetH1(3)->rms(),  "Length") << G4endl;
+
+    G4cout << " EVETO : mean = " 
+       << G4BestUnit(analysisManager->GetH1(4)->mean(), "Energy") 
+       << " rms = " 
+       << G4BestUnit(analysisManager->GetH1(4)->rms(),  "Energy") << G4endl;
+    
+    G4cout << " LVETO : mean = " 
+      << G4BestUnit(analysisManager->GetH1(5)->mean(), "Length") 
+      << " rms = " 
+      << G4BestUnit(analysisManager->GetH1(5)->rms(),  "Length") << G4endl;
   }
 
   // save histograms & ntuple

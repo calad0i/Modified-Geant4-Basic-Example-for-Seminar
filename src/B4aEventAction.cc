@@ -45,7 +45,9 @@ B4aEventAction::B4aEventAction()
    fEnergyAbs(0.),
    fEnergyGap(0.),
    fTrackLAbs(0.),
-   fTrackLGap(0.)
+   fTrackLGap(0.),
+   fEnergyVETO(0.),
+   fTrackVETO(0.)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -62,6 +64,8 @@ void B4aEventAction::BeginOfEventAction(const G4Event* /*event*/)
   fEnergyGap = 0.;
   fTrackLAbs = 0.;
   fTrackLGap = 0.;
+  fEnergyVETO = 0.;
+  fTrackVETO = 0.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -75,16 +79,20 @@ void B4aEventAction::EndOfEventAction(const G4Event* event)
   auto analysisManager = G4AnalysisManager::Instance();
 
   // fill histograms
-  analysisManager->FillH1(0, fEnergyAbs);
-  analysisManager->FillH1(1, fEnergyGap);
-  analysisManager->FillH1(2, fTrackLAbs);
-  analysisManager->FillH1(3, fTrackLGap);
+  fEnergyAbs!=0.?analysisManager->FillH1(0, fEnergyAbs):(int)0;
+  fEnergyGap!=0.?analysisManager->FillH1(1, fEnergyGap):(int)0;
+  fTrackLAbs!=0.?analysisManager->FillH1(2, fTrackLAbs):(int)0;
+  fTrackLGap!=0.?analysisManager->FillH1(3, fTrackLGap):(int)0;
+  fEnergyVETO!=0.?analysisManager->FillH1(4, fEnergyVETO):(int)0;
+  fTrackVETO!=0.?analysisManager->FillH1(5, fTrackVETO):(int)0;
   
   // fill ntuple
   analysisManager->FillNtupleDColumn(0, fEnergyAbs);
   analysisManager->FillNtupleDColumn(1, fEnergyGap);
   analysisManager->FillNtupleDColumn(2, fTrackLAbs);
   analysisManager->FillNtupleDColumn(3, fTrackLGap);
+  analysisManager->FillNtupleDColumn(4, fEnergyVETO);
+  analysisManager->FillNtupleDColumn(5, fTrackVETO);
   analysisManager->AddNtupleRow();  
   
   // Print per event (modulo n)
@@ -104,6 +112,11 @@ void B4aEventAction::EndOfEventAction(const G4Event* event)
                                         << G4BestUnit(fEnergyGap,"Energy")
        << "       total track length: " << std::setw(7)
                                         << G4BestUnit(fTrackLGap,"Length")
+       << G4endl
+       << "   VETO: total energy: " << std::setw(7)
+                                        << G4BestUnit(fEnergyVETO,"Energy")
+       << "       total track length: " << std::setw(7)
+                                        << G4BestUnit(fTrackVETO,"Length")
        << G4endl;
   }
 }  

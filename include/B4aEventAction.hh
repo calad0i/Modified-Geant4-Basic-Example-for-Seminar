@@ -36,7 +36,7 @@
 /// Event action class
 ///
 /// It defines data members to hold the energy deposit and track lengths
-/// of charged particles in Absober and Gap layers:
+/// of charged particles in Absorber and Gap layers:
 /// - fEnergyAbs, fEnergyGap, fTrackLAbs, fTrackLGap
 /// which are collected step by step via the functions
 /// - AddAbs(), AddGap()
@@ -45,35 +45,40 @@ class B4aEventAction : public G4UserEventAction
 {
   public:
     B4aEventAction();
-    virtual ~B4aEventAction();
-
-    virtual void  BeginOfEventAction(const G4Event* event);
-    virtual void    EndOfEventAction(const G4Event* event);
+    virtual ~B4aEventAction() override;
+    virtual void  BeginOfEventAction(const G4Event* event) override;
+    virtual void    EndOfEventAction(const G4Event* event) override;
     
     void AddAbs(G4double de, G4double dl);
     void AddGap(G4double de, G4double dl);
-    
+    void AddVETO(G4double de,G4double dl);
   private:
     G4double  fEnergyAbs;
     G4double  fEnergyGap;
     G4double  fTrackLAbs; 
     G4double  fTrackLGap;
+    G4double  fEnergyVETO;
+    G4double  fTrackVETO;
 };
 
 // inline functions
 
 inline void B4aEventAction::AddAbs(G4double de, G4double dl) {
   fEnergyAbs += de; 
-  fTrackLAbs += dl;
+  fTrackLAbs += dl; 
 }
 
 inline void B4aEventAction::AddGap(G4double de, G4double dl) {
   fEnergyGap += de; 
   fTrackLGap += dl;
 }
+
+inline void B4aEventAction::AddVETO(G4double de,G4double dl){
+  fEnergyVETO+=de;
+  fTrackVETO+=dl;
+}
                      
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #endif
 
     

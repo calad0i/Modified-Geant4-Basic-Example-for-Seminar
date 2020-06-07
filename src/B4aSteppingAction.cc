@@ -71,8 +71,12 @@ void B4aSteppingAction::UserSteppingAction(const G4Step* step)
     fEventAction->AddAbs(edep,stepLength);
   }
   
-  if ( volume == fDetConstruction->GetGapPV() ) {
+  else if ( volume == fDetConstruction->GetGapPV() ) {
     fEventAction->AddGap(edep,stepLength);
+  }
+
+  else if (volume== fDetConstruction->GetVETOPV()){
+    fEventAction->AddVETO(edep,stepLength);
   }
 }
 
