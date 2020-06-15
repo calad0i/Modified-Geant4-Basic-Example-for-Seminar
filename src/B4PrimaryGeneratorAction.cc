@@ -39,7 +39,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
-
+#include "time.h"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B4PrimaryGeneratorAction::B4PrimaryGeneratorAction()
@@ -52,10 +52,11 @@ B4PrimaryGeneratorAction::B4PrimaryGeneratorAction()
   // default particle kinematic
   //
   auto particleDefinition 
-    = G4ParticleTable::GetParticleTable()->FindParticle("e-");
+    = G4ParticleTable::GetParticleTable()->FindParticle("gamma");
   fParticleGun->SetParticleDefinition(particleDefinition);
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  fParticleGun->SetParticleEnergy(50.*MeV);
+  fParticleGun->SetParticleEnergy(52.8*MeV);
+  srand((unsigned int)time(NULL));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -76,6 +77,7 @@ void B4PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   // from G4LogicalVolumeStore
   //
   G4double worldZHalfLength = 0.;
+  G4double worldXYHalfLength =0.;
   auto worldLV = G4LogicalVolumeStore::GetInstance()->GetVolume("World");
 
   // Check that the world volume has box shape
@@ -86,6 +88,7 @@ void B4PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
   if ( worldBox ) {
     worldZHalfLength = worldBox->GetZHalfLength();  
+    worldXYHalfLength = worldBox->GetXHalfLength();
   }
   else  {
     G4ExceptionDescription msg;
@@ -95,13 +98,14 @@ void B4PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     G4Exception("B4PrimaryGeneratorAction::GeneratePrimaries()",
       "MyCode0002", JustWarning, msg);
   } 
-  
   // Set gun position
-  fParticleGun
-    ->SetParticlePosition(G4ThreeVector(0., 0., -worldZHalfLength));
-
+  G4double gunDistance = 1000*mm;
+  static G4double xyBias = (1-37.05/gunDistance)*worldXYHalfLength/1.2;
+  G4long xPos = (G4long)((((double)rand())/RAND_MAX-0.5)*2*xyBias);
+  G4long yPos = (G4long)((((double)rand())/RAND_MAX-0.5)*2*xyBias);
+  fParticleGun->SetParticlePosition(G4ThreeVector(xPos, yPos, -worldZHalfLength));
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(xPos,yPos,(gunDistance-37.05)));
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

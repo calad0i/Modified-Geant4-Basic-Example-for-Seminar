@@ -41,9 +41,11 @@
 #include "FTFP_BERT.hh"
 
 #include "Randomize.hh"
+#include "time.h"
 
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -96,7 +98,11 @@ int main(int argc,char** argv)
   // Optionally: choose a different Random engine...
   //
   // G4Random::setTheEngine(new CLHEP::MTwistEngine);
-  
+
+  //Set random engine, with random seed dependent on time
+  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine());
+  CLHEP::HepRandom::setTheSeed((G4long)time(NULL));
+
   // Construct the default run manager
   //
 #ifdef G4MULTITHREADED
