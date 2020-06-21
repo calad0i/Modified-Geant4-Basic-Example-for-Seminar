@@ -91,9 +91,8 @@ void B4DetectorConstruction::DefineMaterials()
   nistManager->FindOrBuildMaterial("G4_Pb");
   nistManager->FindOrBuildMaterial("G4_H");
   nistManager->FindOrBuildMaterial("G4_C");
-  nistManager->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
+  //nistManager->FindOrBuildMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
 
-  // Liquid argon material
   G4double a;  // mass of a mole;
   G4double z;  // z=mean number of protons;  
   G4double density; 
@@ -105,9 +104,10 @@ void B4DetectorConstruction::DefineMaterials()
   // Construct BC-408
 
   // Vacuum
-  new G4Material("Galactic", z=1., a=1.01*g/mole,density= universe_mean_density,
-                  kStateGas, 2.73*kelvin, 3.e-18*pascal);
+  new G4Material("Galactic", z=1., a=1.01*g/mole, density= universe_mean_density, kStateGas, 2.73*kelvin, 3.e-18*pascal);
 
+  //Lead Glass
+  new G4Material("PbGlass", z=82., a=207.2*g/mole, density = 11.34*1.5/7*g/cm3, kStateSolid);
   // Print materials
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
@@ -118,7 +118,7 @@ G4VPhysicalVolume* B4DetectorConstruction::DefineVolumes()
 {
   // Geometry parameters
   G4int nofLayers = 7;
-  G4double absoThickness = 1.5*mm;
+  G4double absoThickness = 7.*mm;
   G4double gapThickness =  50.*mm;
   G4double calorSizeXY  = 10.*cm;
   G4double VETOThickness = 10.*mm;
@@ -130,7 +130,7 @@ G4VPhysicalVolume* B4DetectorConstruction::DefineVolumes()
   
   // Get materials
   auto defaultMaterial = G4Material::GetMaterial("Galactic");
-  auto absorberMaterial = G4Material::GetMaterial("G4_Pb");
+  auto absorberMaterial = G4Material::GetMaterial("PbGlass");
   auto gapMaterial = G4Material::GetMaterial("BC-408");
   
   if ( ! defaultMaterial || ! absorberMaterial || ! gapMaterial ) {
@@ -179,7 +179,7 @@ G4VPhysicalVolume* B4DetectorConstruction::DefineVolumes()
                                    
   new G4PVPlacement(
                  nullptr,                // no rotation
-                 G4ThreeVector(),  // at (0,0,0)
+                 G4ThreeVector(0,0,VETOThickness/2),  // at (0,0,0)
                  calorLV,          // its logical volume                         
                  "Calorimeter",    // its name
                  worldLV,          // its mother  volume
@@ -269,7 +269,7 @@ G4VPhysicalVolume* B4DetectorConstruction::DefineVolumes()
   fVETOPV
     = new G4PVPlacement(
                  nullptr,                // no rotation
-                 G4ThreeVector(0., 0., -(calorThickness/2+VETOThickness/2)), // its position
+                 G4ThreeVector(0., 0., -calorThickness/2), // its position
                  VETOLV,            // its logical volume                         
                  "VETO",            // its name
                  worldLV,          // its mother  volume
@@ -295,8 +295,9 @@ G4VPhysicalVolume* B4DetectorConstruction::DefineVolumes()
 
   auto simpleBoxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
   simpleBoxVisAtt->SetVisibility(true);
-  calorLV->SetVisAttributes(simpleBoxVisAtt);
-
+  absorberLV->SetVisAttributes(G4VisAttributes(G4Color(1.0,1.0,0.5)));
+  gapLV->SetVisAttributes(G4VisAttributes(G4Color(0.5,1.0,1.0)));
+  VETOLV->SetVisAttributes(G4VisAttributes(G4Color(1.0,0.5,1.0)));
   //
   // Always return the physical World
   //

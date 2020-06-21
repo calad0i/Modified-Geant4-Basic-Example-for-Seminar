@@ -82,17 +82,19 @@ void B4PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
   // Check that the world volume has box shape
   G4Box* worldBox = nullptr;
-  if (  worldLV ) {
+  if ( worldLV ) {
     worldBox = dynamic_cast<G4Box*>(worldLV->GetSolid());
   }
 
   if ( worldBox ) {
     worldZHalfLength = worldBox->GetZHalfLength();  
     worldXYHalfLength = worldBox->GetXHalfLength();
+
   }
+
   else  {
     G4ExceptionDescription msg;
-    msg << "World volume of box shape not found." << G4endl;
+    msg << "Volume of box shape not found." << G4endl;
     msg << "Perhaps you have changed geometry." << G4endl;
     msg << "The gun will be place in the center.";
     G4Exception("B4PrimaryGeneratorAction::GeneratePrimaries()",
@@ -100,7 +102,7 @@ void B4PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   } 
   // Set gun position
   G4double gunDistance = 1000*mm;
-  static G4double xyBias = (1-37.05/gunDistance)*worldXYHalfLength/1.2;
+  static G4double xyBias = (1-worldZHalfLength/12/gunDistance)*worldXYHalfLength/1.2;
   G4long xPos = (G4long)((((double)rand())/RAND_MAX-0.5)*2*xyBias);
   G4long yPos = (G4long)((((double)rand())/RAND_MAX-0.5)*2*xyBias);
   fParticleGun->SetParticlePosition(G4ThreeVector(xPos, yPos, -worldZHalfLength));
