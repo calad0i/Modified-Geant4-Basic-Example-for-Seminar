@@ -107,6 +107,16 @@ void B4PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4long yPos = (G4long)((((double)rand())/RAND_MAX-0.5)*2*xyBias);
   fParticleGun->SetParticlePosition(G4ThreeVector(xPos, yPos, -worldZHalfLength));
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(xPos,yPos,(gunDistance-37.05)));
+  // Set positron energy distribution ~ 6x2-4x3
+  
+  if(fParticleGun->GetParticleDefinition()->GetParticleName()=="e+") {
+    static G4double stdGunEnergy = fParticleGun->GetParticleEnergy();
+    static G4double ratio;
+    ratio=((double)rand())/RAND_MAX;
+    ratio = 0.793701*pow(ratio,1/3) + 0.104993*pow(ratio,2./3) + 0.0416667*ratio + 0.0214348*pow(ratio,4./3) + 0.0124761*pow(ratio,5./3) + 0.0078125*pow(ratio,2) + 0.00513566*pow(ratio,7./3) + 0.00349514*pow(ratio,8./3) + 0.00244141*pow(ratio,3);
+    fParticleGun->SetParticleEnergy(ratio*(stdGunEnergy));
+  }
+
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
